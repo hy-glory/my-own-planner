@@ -26,7 +26,7 @@ const FixedNote = () => {
     if (!raw.trim()) return;
 
     let type: 'task' | 'memo' = 'memo';
-    let done = false;
+    const done = false;
     let text = raw.trim();
 
     if (text.startsWith('- ')) {
