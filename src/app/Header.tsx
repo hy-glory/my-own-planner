@@ -1,17 +1,19 @@
-'use client';
-import { useState } from 'react';
+"use client";
+
+import AddNote from "./AddNote";
 
 interface HeaderProps {
   selectedDate: Date;
   onSelectDate: (date: Date) => void;
+  onAddNote: () => void;
 }
 
-const Header = ({ selectedDate, onSelectDate }: HeaderProps) => {
+const Header = ({ selectedDate, onSelectDate, onAddNote }: HeaderProps) => {
   const today = new Date();
   const localToday = new Date(today.getTime() + 9 * 60 * 60 * 1000);
   const year = localToday.getFullYear();
-  const month = String(localToday.getMonth() + 1).padStart(2, '0');
-  const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+  const month = String(localToday.getMonth() + 1).padStart(2, "0");
+  const days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
   const startOfWeek = new Date(selectedDate);
   startOfWeek.setDate(selectedDate.getDate() - selectedDate.getDay());
@@ -24,10 +26,10 @@ const Header = ({ selectedDate, onSelectDate }: HeaderProps) => {
 
   return (
     <div className="flex flex-col border-b p-2">
-      <h1 className="font-bold text-lg">
+      <h1 className="font-bold text-lg select-none">
         {year}.{month}
       </h1>
-      <div className="flex gap-4 mt-2">
+      <div className="flex gap-4 mt-2 select-none">
         {weekDates.map((date, i) => {
           const isSelected =
             date.toDateString() === selectedDate.toDateString();
@@ -35,21 +37,20 @@ const Header = ({ selectedDate, onSelectDate }: HeaderProps) => {
             <button
               key={i}
               onClick={() => onSelectDate(date)}
-              className="flex flex-col items-center focus:outline-none"
+              className="flex flex-col items-center focus:outline-none cursor-pointer"
             >
-              <span
-                className={isSelected ? 'font-bold text-sky-600' : ''}
-              >
+              <span className={isSelected ? "font-bold text-sky-600" : ""}>
                 {days[i]}
               </span>
               <div
                 className={`w-2 h-2 rounded-full mt-1 ${
-                  isSelected ? 'bg-sky-600' : 'bg-sky-300'
+                  isSelected ? "bg-sky-600" : "bg-sky-300"
                 }`}
               />
             </button>
           );
         })}
+        <AddNote onAddNote={onAddNote} />
       </div>
     </div>
   );
