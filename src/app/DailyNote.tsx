@@ -172,6 +172,7 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
         placeholder="내용 추가"
         className="border-0 border-b border-gray-300 focus:outline-none focus:border-sky-400 
         px-2 py-1 w-full mt-2 resize-none overflow-hidden cursor-text"
+        ref={ref}
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={(e) => {
