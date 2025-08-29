@@ -19,6 +19,7 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
   const todayKey = formatDate(selectedDate);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [inputValue, setInputValue] = useState('');
+  const refText = useRef<HTMLTextAreaElement>(null);
 
   // LS에서 가져오기
   useEffect(() => {
@@ -67,6 +68,7 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
     setInputValue('');
   };
 
+  // 입력창 높이 자동 조절 (이미 저장된 task 편집 시 적용)
   const ref = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
     if (ref.current) {
@@ -154,12 +156,18 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
       ))}
 
       <textarea
-        placeholder="내용 추가"
+        placeholder="task 추가"
         className="border-0 border-b border-gray-300 focus:outline-none focus:border-sky-400 
         px-2 py-1 w-full mt-2 resize-none overflow-hidden cursor-text"
-        ref={ref}
+        ref={refText}
         value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+          setInputValue(e.target.value);
+          if (refText.current) {
+            refText.current.style.height = 'auto';
+            refText.current.style.height = `${refText.current.scrollHeight}px`;
+          }
+        }}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
