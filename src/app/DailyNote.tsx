@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import AddTask from './AddTask';
 
 interface Task {
   id: number;
@@ -18,8 +19,7 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
 
   const todayKey = formatDate(selectedDate);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const refText = useRef<HTMLTextAreaElement>(null);
+  const [text, setText] = useState('');
 
   // LS에서 가져오기
   useEffect(() => {
@@ -27,45 +27,30 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
     if (saved) setTasks(JSON.parse(saved));
   }, []);
 
-  // 실시간 LS 업데이트
-  const handleChange = (id: number, newText: string) => {
+  // task 변경
+  const updateTask = (id: number, newText: string) => {
+    const matchTime = text.match(/@(\d{3,4})$/);
+    let newTime: string | undefined = undefined;
+    if (matchTime) {
+      const rawTime = matchTime[1];
+      if (rawTime.length === 3) {
+        newTime = `0${rawTime[0]}:${rawTime.slice(1)}`;
+      } else {
+        newTime = `${rawTime.slice(0, 2)}:${rawTime.slice(2)}`;
+      }
+      newText = text.replace(/@\d{3,4}$/, '').trim();
+    }
+
     setTasks((prev) => {
       const updated = prev.map((task) =>
-        task.id === id ? { ...task, text: newText } : task
+        task.id === id
+          ? { ...task, text: newText, time: newTime }
+          : task
       );
+
       localStorage.setItem('daily_notes', JSON.stringify(updated));
       return updated;
     });
-  };
-
-  // task 추가
-  const addTask = (raw: string) => {
-    if (!raw.trim()) return;
-
-    const done = false;
-    let text = raw.trim();
-    let time: string | undefined = undefined;
-
-    const match = text.match(/@(\d{3,4})$/);
-    if (match) {
-      const rawTime = match[1];
-      if (rawTime.length === 3) {
-        time = `0${rawTime[0]}:${rawTime.slice(1)}`;
-      } else {
-        time = `${rawTime.slice(0, 2)}:${rawTime.slice(2)}`;
-      }
-      text = text.replace(/@\d{3,4}$/, '').trim();
-    }
-
-    const newTask: Task = {
-      id: Date.now(),
-      text,
-      time,
-      done,
-      date: todayKey,
-    };
-    setTasks([...tasks, newTask]);
-    setInputValue('');
   };
 
   // 입력창 높이 자동 조절 (이미 저장된 task 편집 시 적용)
@@ -75,7 +60,7 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
       ref.current.style.height = 'auto';
       ref.current.style.height = `${ref.current.scrollHeight}px`;
     }
-  }, [[tasks], [inputValue]]);
+  }, [[tasks], [text]]);
 
   const toggleTask = (id: number) => {
     setTasks(
@@ -129,8 +114,13 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
             overflow-hidden cursor-text"
             style={{ minHeight: '1.5rem' }}
             value={t.text}
-            onChange={(e) => handleChange(t.id, e.target.value)}
+            onChange={(e) => updateTask(t.id, e.target.value)}
             onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                updateTask(t.id, t.text);
+                e.currentTarget.blur();
+              }
               // 내용이 없을 때 Backspace → 삭제
               if (e.key === 'Backspace' && t.text === '') {
                 e.preventDefault();
@@ -155,26 +145,7 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
         </div>
       ))}
 
-      <textarea
-        placeholder="task 추가"
-        className="border-0 border-b border-gray-300 focus:outline-none focus:border-sky-400 
-        px-2 py-1 w-full mt-2 resize-none overflow-hidden cursor-text"
-        ref={refText}
-        value={inputValue}
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-          setInputValue(e.target.value);
-          if (refText.current) {
-            refText.current.style.height = 'auto';
-            refText.current.style.height = `${refText.current.scrollHeight}px`;
-          }
-        }}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            addTask(inputValue);
-          }
-        }}
-      />
+      <AddTask todayKey={todayKey} />
 
       {complete.length > 0 && (
         <>
