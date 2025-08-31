@@ -20,6 +20,7 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
   const todayKey = formatDate(selectedDate);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [text, setText] = useState('');
+  const refText = useRef<HTMLTextAreaElement>(null);
 
   // LS에서 가져오기
   useEffect(() => {
@@ -27,7 +28,40 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
     if (saved) setTasks(JSON.parse(saved));
   }, []);
 
-  // task 변경
+  // addTask
+  const addTask = (raw: string) => {
+    if (raw.trim() === '') return;
+
+    const done = false;
+    let rawText = raw.trim();
+    let time: string | undefined = undefined;
+
+    const matchTime = raw.match(/@(\d{3,4})$/);
+    if (matchTime) {
+      const rawTime = matchTime[1];
+      if (rawTime.length === 3) {
+        time = `0${rawTime[0]}:${rawTime.slice(1)}`;
+      } else {
+        time = `${rawTime.slice(0, 2)}:${rawTime.slice(2)}`;
+      }
+      rawText = raw.replace(/@\d{3,4}$/, '').trim();
+    }
+
+    const newTask: Task = {
+      id: Date.now(),
+      text: rawText,
+      time,
+      done,
+      date: todayKey,
+    };
+    localStorage.setItem(
+      'daily_notes',
+      JSON.stringify([...tasks, newTask])
+    );
+    setTasks([...tasks, newTask]);
+  };
+
+  // updateTask
   const updateTask = (id: number, newText: string) => {
     const matchTime = text.match(/@(\d{3,4})$/);
     let newTime: string | undefined = undefined;
@@ -145,7 +179,7 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
         </div>
       ))}
 
-      <AddTask todayKey={todayKey} />
+      <AddTask onAddTask={addTask} />
 
       {complete.length > 0 && (
         <>
