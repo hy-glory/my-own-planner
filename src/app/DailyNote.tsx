@@ -108,7 +108,7 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
   const complete = sortByTime(todayTasks.filter((task) => task.done));
 
   return (
-    <div className="p-2 bg-sky-50 rounded-md border border-sky-200 select-none">
+    <div className="p-2 bg-sky-50 select-none">
       <h2 className="font-bold mb-2">
         📆{' '}
         {selectedDate.toLocaleDateString('ko-KR', {

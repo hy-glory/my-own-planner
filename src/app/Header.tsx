@@ -1,5 +1,5 @@
-"use client";
-import { useState } from "react";
+'use client';
+import { useState } from 'react';
 
 interface HeaderProps {
   selectedDate: Date;
@@ -10,8 +10,8 @@ const Header = ({ selectedDate, onSelectDate }: HeaderProps) => {
   const today = new Date();
   const localToday = new Date(today.getTime() + 9 * 60 * 60 * 1000);
   const year = localToday.getFullYear();
-  const month = String(localToday.getMonth() + 1).padStart(2, "0");
-  const days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+  const month = String(localToday.getMonth() + 1).padStart(2, '0');
+  const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 
   const startOfWeek = new Date(selectedDate);
   startOfWeek.setDate(selectedDate.getDate() - selectedDate.getDay());
@@ -23,7 +23,7 @@ const Header = ({ selectedDate, onSelectDate }: HeaderProps) => {
   });
 
   return (
-    <div className="flex flex-col border-b p-2 select-none">
+    <div className="flex flex-col bg-white border-b p-2 select-none">
       <h1 className="font-bold text-lg">
         {year}.{month}
       </h1>
@@ -37,12 +37,14 @@ const Header = ({ selectedDate, onSelectDate }: HeaderProps) => {
               onClick={() => onSelectDate(date)}
               className="flex flex-col items-center focus:outline-none cursor-pointer"
             >
-              <span className={isSelected ? "font-bold text-sky-600" : ""}>
+              <span
+                className={isSelected ? 'font-bold text-sky-600' : ''}
+              >
                 {days[i]}
               </span>
               <div
                 className={`w-2 h-2 rounded-full mt-1 ${
-                  isSelected ? "bg-sky-600" : "bg-sky-300"
+                  isSelected ? 'bg-sky-600' : 'bg-sky-300'
                 }`}
               />
             </button>
