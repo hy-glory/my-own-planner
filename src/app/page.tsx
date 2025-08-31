@@ -8,15 +8,12 @@ const Home = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   return (
-    <div>
+    <div className="min-h-screen bg-sky-50">
       <Header
         selectedDate={selectedDate}
         onSelectDate={setSelectedDate}
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <DailyNote selectedDate={selectedDate} />
-        <FixedNote />
-      </div>
+      <DailyNote selectedDate={selectedDate} />
     </div>
   );
 };
