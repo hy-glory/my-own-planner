@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+import Link from 'next/link';
+import { IoIosList } from 'react-icons/io';
 
 interface HeaderProps {
   selectedDate: Date;
@@ -23,34 +24,44 @@ const Header = ({ selectedDate, onSelectDate }: HeaderProps) => {
   });
 
   return (
-    <div className="flex flex-col bg-white border-b p-2 select-none">
-      <h1 className="font-bold text-lg">
-        {year}.{month}
-      </h1>
-      <div className="flex gap-4 mt-2">
-        {weekDates.map((date, i) => {
-          const isSelected =
-            date.toDateString() === selectedDate.toDateString();
-          return (
-            <button
-              key={i}
-              onClick={() => onSelectDate(date)}
-              className="flex flex-col items-center focus:outline-none cursor-pointer"
-            >
-              <span
-                className={isSelected ? 'font-bold text-sky-600' : ''}
+    <div className="flex justify-between items-center p-3 bg-white border-b">
+      <div className="flex flex-col p-2 select-none">
+        <h1 className="font-bold text-lg">
+          {year}.{month}
+        </h1>
+        <div className="flex gap-5 mt-1">
+          {weekDates.map((date, i) => {
+            const isSelected =
+              date.toDateString() === selectedDate.toDateString();
+            return (
+              <button
+                key={i}
+                onClick={() => onSelectDate(date)}
+                className="flex flex-col items-center focus:outline-none cursor-pointer"
               >
-                {days[i]}
-              </span>
-              <div
-                className={`w-2 h-2 rounded-full mt-1 ${
-                  isSelected ? 'bg-sky-600' : 'bg-sky-300'
-                }`}
-              />
-            </button>
-          );
-        })}
+                <span
+                  className={
+                    isSelected ? 'font-bold text-sky-600' : ''
+                  }
+                >
+                  {days[i]}
+                </span>
+                <div
+                  className={`w-2 h-2 rounded-full mt-1 ${
+                    isSelected ? 'bg-sky-600' : 'bg-sky-300'
+                  }`}
+                />
+              </button>
+            );
+          })}
+        </div>
       </div>
+      <IoIosList
+        className="mr-4 text-sky-600 h-8 w-8 cursor-pointer hover:text-blue-600"
+        onClick={() =>
+          window.open('/note', '_blank', 'width=400,height=600')
+        }
+      />
     </div>
   );
 };
