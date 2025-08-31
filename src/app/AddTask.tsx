@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 
 const AddTask = ({
   onAddTask,
@@ -22,7 +22,7 @@ const AddTask = ({
           refText.current.style.height = `${refText.current.scrollHeight}px`;
         }
       }}
-      onKeyDown={(e) => {
+      onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
           e.preventDefault();
           onAddTask(text);
