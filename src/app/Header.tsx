@@ -25,8 +25,8 @@ const Header = ({ selectedDate, onSelectDate, onAddNote }: HeaderProps) => {
   });
 
   return (
-    <div className="flex flex-col border-b p-2">
-      <h1 className="font-bold text-lg select-none">
+    <div className="flex flex-col bg-white border-b p-2 select-none">
+      <h1 className="font-bold text-lg">
         {year}.{month}
       </h1>
       <div className="flex gap-4 mt-2 select-none">

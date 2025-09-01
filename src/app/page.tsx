@@ -27,25 +27,13 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-sky-50">
       <Header
         selectedDate={selectedDate}
         onSelectDate={setSelectedDate}
         onAddNote={addNote}
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <DailyNote selectedDate={selectedDate} />
-        <div className="p-4 flex flex-wrap gap-4">
-          {memos.map((note) => (
-            <FixedNote
-              key={note.id}
-              note={note}
-              onChange={updateNote}
-              onDelete={deleteNote}
-            />
-          ))}
-        </div>
-      </div>
+      <DailyNote selectedDate={selectedDate} />
     </div>
   );
 };
