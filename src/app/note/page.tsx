@@ -1,11 +1,11 @@
-'use client';
-import { useState, useEffect } from 'react';
+"use client";
+import { useState, useEffect } from "react";
 
 export interface Note {
   id: number;
   title: string;
   text: string;
-  date: string;
+  latestDate: string;
 }
 
 const OneNote = () => {
@@ -13,14 +13,14 @@ const OneNote = () => {
 
   // localStorage에서 노트 불러오기
   useEffect(() => {
-    const saved = localStorage.getItem('notes');
+    const saved = localStorage.getItem("notes");
     if (saved) setNotes(JSON.parse(saved));
   }, []);
 
   // 노트를 localStorage에 저장하기
   const saveNotes = (updatedNotes: Note[]) => {
     setNotes(updatedNotes);
-    localStorage.setItem('notes', JSON.stringify(updatedNotes));
+    localStorage.setItem("notes", JSON.stringify(updatedNotes));
   };
 
   return (

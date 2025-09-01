@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import { IoIosList } from "react-icons/io";
 
 interface HeaderProps {
@@ -55,7 +54,9 @@ const Header = ({ selectedDate, onSelectDate, onAddNote }: HeaderProps) => {
       </div>
       <IoIosList
         className="mr-4 text-sky-600 h-8 w-8 cursor-pointer hover:text-blue-600"
-        onClick={() => window.open("/note", "_blank", "width=400,height=600")}
+        onClick={() =>
+          window.open("/noteList", "_blank", "width=400,height=600")
+        }
       />
     </div>
   );
