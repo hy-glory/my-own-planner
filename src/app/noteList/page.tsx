@@ -1,12 +1,14 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IoIosClose } from "react-icons/io";
 import { LuCirclePlus } from "react-icons/lu";
-import { FiMoreHorizontal } from "react-icons/fi";
+import { FaRegTrashAlt } from "react-icons/fa";
 import { Note, formatDate } from "../note/page";
 
 const NoteList = () => {
   const [notes, setNotes] = useState<Note[]>([]);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   // localStorage에서 노트 불러오기
   useEffect(() => {
@@ -54,16 +56,14 @@ const NoteList = () => {
   };
 
   // closeNote
-  const closeNote = (id: number) => {
-    const updatedNotes = notes.map((note) =>
-      note.id === id ? { ...note, isOpen: false } : note
-    );
-    setNotes(updatedNotes);
-    localStorage.setItem("notes", JSON.stringify(updatedNotes));
-  };
-
-  // menudrop
-  const menuDrop = (id: number) => {};
+  // const closeNote = (id: number) => {
+  //   const updatedNotes = notes.map((note) =>
+  //     note.id === id ? { ...note, isOpen: false } : note
+  //   );
+  //   setNotes(updatedNotes);
+  //   localStorage.setItem("notes", JSON.stringify(updatedNotes));
+  //   // window.close(); 함수 아직 구현 안됨...
+  // };
 
   return (
     <>
@@ -76,7 +76,7 @@ const NoteList = () => {
       </div>
       <div className="p-2 min-h-screen select-none">
         <p
-          className="bg-sky-100 p-2 rounded-md w-full h-18 shadow-md mb-2
+          className="bg-sky-100 p-2 rounded-md w-full h-18 shadow-md mb-4
         hover:shadow-lg hover:bg-sky-200 transition flex items-center justify-center"
         >
           <LuCirclePlus className="text-sky-700 h-8 w-8" onClick={addNote} />
@@ -85,18 +85,24 @@ const NoteList = () => {
           {notes.map((note) => (
             <li
               key={note.id}
-              className="bg-sky-100 p-2 rounded-md w-full h-28 shadow-md mb-2
+              className="bg-sky-100 p-2 rounded-md w-full h-34 shadow-md mb-2
             hover:shadow-lg hover:bg-sky-200 transition flex flex-col"
-              onClick={() => openNote(note.id)}
             >
-              <FiMoreHorizontal className="ml-auto" />
-              <h3 className="font-semibold mb-1 line-clamp-1">
-                {note.title || "제목 없음"}
-              </h3>
-              <p className="text-gray-700 line-clamp-2">{note.text}</p>
-              <p className="text-sm text-gray-500 mt-auto">
-                {formatDate(note.latestDate)}
-              </p>
+              <FaRegTrashAlt
+                className="ml-auto mb-1"
+                onClick={() => {
+                  if (confirm("삭제하시겠습니까?")) deleteNote(note.id);
+                }}
+              />
+              <div onClick={() => openNote(note.id)}>
+                <h3 className="font-semibold mb-1 line-clamp-1">
+                  {note.title || "제목 없음"}
+                </h3>
+                <p className="text-gray-700 line-clamp-2">{note.text}</p>
+                <p className="text-sm text-gray-500 mt-auto">
+                  {formatDate(note.latestDate)}
+                </p>
+              </div>
             </li>
           ))}
         </ul>
