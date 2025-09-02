@@ -7,8 +7,6 @@ import { Note, formatDate } from "../note/page";
 
 const NoteList = () => {
   const [notes, setNotes] = useState<Note[]>([]);
-  const [menuOpen, setMenuOpen] = useState<boolean>(false);
-  const menuRef = useRef<HTMLDivElement>(null);
 
   // localStorage에서 노트 불러오기
   useEffect(() => {

@@ -4,10 +4,9 @@ import { IoIosList } from "react-icons/io";
 interface HeaderProps {
   selectedDate: Date;
   onSelectDate: (date: Date) => void;
-  onAddNote: () => void;
 }
 
-const Header = ({ selectedDate, onSelectDate, onAddNote }: HeaderProps) => {
+const Header = ({ selectedDate, onSelectDate }: HeaderProps) => {
   const today = new Date();
   const localToday = new Date(today.getTime() + 9 * 60 * 60 * 1000);
   const year = localToday.getFullYear();
