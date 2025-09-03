@@ -9,8 +9,20 @@ const NoteList = () => {
 
   // localStorage에서 노트 불러오기
   useEffect(() => {
-    const saved = localStorage.getItem("notes");
-    if (saved) setNotes(JSON.parse(saved));
+    const loadList = () => {
+      const saved = localStorage.getItem("notes");
+      if (saved) {
+        const parsed: Note[] = JSON.parse(saved);
+        parsed.sort(
+          (a, b) =>
+            new Date(b.latestDate).getTime() - new Date(a.latestDate).getTime()
+        );
+        setNotes(parsed);
+      }
+    };
+    loadList();
+    window.addEventListener("storage", loadList);
+    return () => window.removeEventListener("storage", loadList);
   }, []);
 
   // addNote
@@ -24,6 +36,12 @@ const NoteList = () => {
       isOpen: true,
     };
     const updatedNotes = [...notes, newNote];
+
+    updatedNotes.sort((a, b) => {
+      return (
+        new Date(b.latestDate).getTime() - new Date(a.latestDate).getTime()
+      );
+    });
     setNotes(updatedNotes);
     localStorage.setItem("notes", JSON.stringify(updatedNotes));
 
