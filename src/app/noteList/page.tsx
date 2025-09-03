@@ -89,28 +89,37 @@ const NoteList = () => {
         <p
           className="bg-sky-100 p-2 rounded-md w-full h-18 shadow-md mb-4
         hover:shadow-lg hover:bg-sky-200 transition flex items-center justify-center"
+          onClick={addNote}
         >
-          <LuCirclePlus className="text-sky-700 h-8 w-8" onClick={addNote} />
+          <LuCirclePlus className="text-sky-700 h-8 w-8" />
         </p>
         <ul className="flex flex-col gap-2 justify-center">
           {notes.map((note) => (
             <li
               key={note.id}
-              className="bg-sky-100 p-2 rounded-md w-full h-34 shadow-md mb-2
+              className="bg-sky-100 p-2 rounded-md w-full h-33 shadow-md mb-2
             hover:shadow-lg hover:bg-sky-200 transition flex flex-col"
+              onClick={() => openNote(note.id)}
             >
-              <FaRegTrashAlt
-                className="ml-auto mb-1"
-                onClick={() => {
-                  if (confirm("삭제하시겠습니까?")) deleteNote(note.id);
-                }}
-              />
-              <div onClick={() => openNote(note.id)}>
-                <h3 className="font-semibold mb-1 line-clamp-1">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="font-semibold line-clamp-1">
                   {note.title || "제목 없음"}
                 </h3>
-                <p className="text-gray-700 line-clamp-2">{note.text}</p>
-                <p className="text-sm text-gray-500 mt-auto">
+                <FaRegTrashAlt
+                  className="cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (confirm("삭제하시겠습니까?")) deleteNote(note.id);
+                  }}
+                />
+              </div>
+              <div>
+                <div className="flex-grow">
+                  <p className="text-gray-700 line-clamp-2 h-11 mb-3">
+                    {note.text}
+                  </p>
+                </div>
+                <p className="text-sm text-gray-500 mb-2">
                   {formatDate(note.latestDate)}
                 </p>
               </div>
