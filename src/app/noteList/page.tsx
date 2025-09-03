@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { IoIosClose } from "react-icons/io";
 import { LuCirclePlus } from "react-icons/lu";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { Note, formatDate } from "../note/page";
+import { Note, formatDate } from "../note/oneNote";
 
 const NoteList = () => {
   const [notes, setNotes] = useState<Note[]>([]);
