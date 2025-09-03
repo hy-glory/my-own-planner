@@ -1,7 +1,7 @@
-'use client';
-import React, { useState, useEffect, useRef } from 'react';
-import AddTask from './AddTask';
-import TaskItem from './TaskItem';
+"use client";
+import React, { useState, useEffect, useRef } from "react";
+import AddTask from "./AddTask";
+import TaskItem from "./TaskItem";
 
 export interface Task {
   id: number;
@@ -13,23 +13,22 @@ export interface Task {
 
 const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
   const formatDate = (d: Date) =>
-    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
-      2,
-      '0'
-    )}-${String(d.getDate()).padStart(2, '0')}`;
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+      d.getDate()
+    ).padStart(2, "0")}`;
 
   const todayKey = formatDate(selectedDate);
   const [tasks, setTasks] = useState<Task[]>([]);
 
   // localStorage에서 Get
   useEffect(() => {
-    const saved = localStorage.getItem('daily_notes');
+    const saved = localStorage.getItem("daily_notes");
     if (saved) setTasks(JSON.parse(saved));
   }, []);
 
   // addTask
   const addTask = (raw: string) => {
-    if (raw.trim() === '') return;
+    if (raw.trim() === "") return;
 
     const done = false;
     let rawText = raw.trim();
@@ -43,7 +42,7 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
       } else {
         time = `${rawTime.slice(0, 2)}:${rawTime.slice(2)}`;
       }
-      rawText = raw.replace(/@\d{3,4}$/, '').trim();
+      rawText = raw.replace(/@\d{3,4}$/, "").trim();
     }
 
     const newTask: Task = {
@@ -53,10 +52,7 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
       done,
       date: todayKey,
     };
-    localStorage.setItem(
-      'daily_notes',
-      JSON.stringify([...tasks, newTask])
-    );
+    localStorage.setItem("daily_notes", JSON.stringify([...tasks, newTask]));
     setTasks([...tasks, newTask]);
   };
 
@@ -69,7 +65,7 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
         task.id === id ? { ...task, text: newText } : task
       );
 
-      localStorage.setItem('daily_notes', JSON.stringify(updated));
+      localStorage.setItem("daily_notes", JSON.stringify(updated));
       return updated;
     });
   };
@@ -78,7 +74,7 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
   const deleteTask = (id: number) => {
     setTasks((prev) => {
       const updated = prev.filter((task) => task.id !== id);
-      localStorage.setItem('daily_notes', JSON.stringify(updated));
+      localStorage.setItem("daily_notes", JSON.stringify(updated));
       return updated;
     });
   };
@@ -89,7 +85,7 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
       const updated = prev.map((task) =>
         task.id === id ? { ...task, done: !task.done } : task
       );
-      localStorage.setItem('daily_notes', JSON.stringify(updated));
+      localStorage.setItem("daily_notes", JSON.stringify(updated));
       return updated;
     });
   };
@@ -102,19 +98,17 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
       if (b.time) return 1;
       return 0;
     });
-  const incomplete = sortByTime(
-    todayTasks.filter((task) => !task.done)
-  );
+  const incomplete = sortByTime(todayTasks.filter((task) => !task.done));
   const complete = sortByTime(todayTasks.filter((task) => task.done));
 
   return (
     <div className="p-2 bg-sky-50 select-none">
       <h2 className="font-bold mb-2">
-        📆{' '}
-        {selectedDate.toLocaleDateString('ko-KR', {
-          month: 'long',
-          day: 'numeric',
-          weekday: 'long',
+        📆{" "}
+        {selectedDate.toLocaleDateString("ko-KR", {
+          month: "long",
+          day: "numeric",
+          weekday: "long",
         })}
       </h2>
 
@@ -152,9 +146,7 @@ const DailyNote = ({ selectedDate }: { selectedDate: Date }) => {
                   {t.text}
                 </span>
 
-                {t.time && (
-                  <span className="ml-auto text-sm">{t.time}</span>
-                )}
+                {t.time && <span className="ml-auto text-sm">{t.time}</span>}
               </div>
             ))}
           </div>
