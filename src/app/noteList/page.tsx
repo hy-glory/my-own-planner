@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { IoIosClose } from "react-icons/io";
 import { LuCirclePlus } from "react-icons/lu";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { Note, formatDate } from "../note/oneNote";
@@ -67,10 +66,6 @@ const NoteList = () => {
     <>
       <div className="flex justify-between items-center px-2 py-1 select-none border-b border-sky-600">
         <h2 className="text-lg font-bold">노트 목록</h2>
-        <IoIosClose
-          className="h-10 w-10 text-sky-600 hover:text-sky-800"
-          onClick={() => {}}
-        />
       </div>
       <div className="p-2 min-h-screen select-none">
         <p
